@@ -62,7 +62,7 @@ export default function ChatPage() {
         </Conversation>
 
         <PromptInput onSubmit={handleSubmit} className="mt-6">
-          <PromptInputBody>
+          <PromptInputBody data-align="block-end">
             <PromptInputTextarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
