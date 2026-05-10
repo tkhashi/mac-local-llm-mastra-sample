@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# mac-local-llm-mastra-sample
 
-## Getting Started
+Sample app accompanying the Zenn book [MacBook Pro M シリーズで始める ローカル LLM ハンズオン](https://zenn.dev) — chapter 9 (Mastra + Next.js + AI SDK UI).
 
-First, run the development server:
+A Next.js chat app that streams responses from a locally-running Ollama model via a Mastra agent.
+
+## Prerequisites
+
+- Node.js 20+
+- [Ollama](https://ollama.com) installed and running (`curl http://localhost:11434` returns `Ollama is running`)
+- A pulled model, e.g. `ollama pull gemma4:e4b`
+
+## Setup
 
 ```bash
+git clone https://github.com/tkhashi/mac-local-llm-mastra-sample.git
+cd mac-local-llm-mastra-sample
+npm install
+cp .env.example .env  # then edit if needed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000/chat> and start chatting.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.env`:
 
-## Learn More
+```
+OLLAMA_BASE_URL=http://localhost:11434/api
+OLLAMA_MODEL=gemma4:e4b
+```
 
-To learn more about Next.js, take a look at the following resources:
+To use a different model, change `OLLAMA_MODEL` to anything in `ollama list` (e.g. `gemma4:e2b`, `qwen3.6:27b`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What's inside
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Path | Role |
+|---|---|
+| `src/mastra/agents/chat-agent.ts` | Mastra Agent wired to Ollama via `ollama-ai-provider-v2` |
+| `src/mastra/tools/now-tool.ts` | Example tool — registered in `chat-agent.ts` |
+| `src/mastra/index.ts` | Mastra instance |
+| `src/app/api/chat/route.ts` | Next.js API route using `handleChatStream` from `@mastra/ai-sdk` |
+| `src/app/chat/page.tsx` | UI using `useChat` from `@ai-sdk/react` and AI Elements |
 
-## Deploy on Vercel
+## Pinned versions (important)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This stack must stay on AI SDK **v5** because `@mastra/ai-sdk` defaults to v5. Pin these:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `ai@^5`
+- `@ai-sdk/react@^2`
+- `ollama-ai-provider-v2@^1.5.5`
+
+`@mastra/core@latest` and `@mastra/ai-sdk@latest` are fine.
+
+## License
+
+MIT
