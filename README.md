@@ -1,28 +1,28 @@
 # mac-local-llm-mastra-sample
 
-Sample app accompanying the Zenn book [MacBook Pro M シリーズで始める ローカル LLM ハンズオン](https://zenn.dev) — chapter 9 (Mastra + Next.js + AI SDK UI).
+Zenn Book「[MacBook Pro M シリーズで始める ローカル LLM ハンズオン](https://zenn.dev)」第 9 章（Mastra + Next.js + AI SDK UI）のサンプルアプリです。
 
-A Next.js chat app that streams responses from a locally-running Ollama model via a Mastra agent.
+ローカルで動作する Ollama モデルを Mastra Agent 経由で呼び出し、Next.js のチャット UI にストリーミング応答を返します。
 
-## Prerequisites
+## 前提条件
 
-- Node.js 20+
-- [Ollama](https://ollama.com) installed and running (`curl http://localhost:11434` returns `Ollama is running`)
-- A pulled model, e.g. `ollama pull gemma4:e4b`
+- Node.js 20 以上
+- [Ollama](https://ollama.com) がインストール済みで起動していること（`curl http://localhost:11434` で `Ollama is running` が返る）
+- 任意のモデルを pull 済みであること（例: `ollama pull gemma4:e4b`）
 
-## Setup
+## セットアップ
 
 ```bash
 git clone https://github.com/tkhashi/mac-local-llm-mastra-sample.git
 cd mac-local-llm-mastra-sample
 npm install
-cp .env.example .env  # then edit if needed
+cp .env.example .env  # 必要に応じて編集
 npm run dev
 ```
 
-Open <http://localhost:3000/chat> and start chatting.
+ブラウザで <http://localhost:3000/chat> を開くとチャットを試せます。
 
-## Environment
+## 環境変数
 
 `.env`:
 
@@ -31,28 +31,28 @@ OLLAMA_BASE_URL=http://localhost:11434/api
 OLLAMA_MODEL=gemma4:e4b
 ```
 
-To use a different model, change `OLLAMA_MODEL` to anything in `ollama list` (e.g. `gemma4:e2b`, `qwen3.6:27b`).
+別のモデルを使いたい場合は `OLLAMA_MODEL` を `ollama list` に表示されている任意のモデル名に変更してください（例: `gemma4:e2b`、`qwen3.6:27b`）。
 
-## What's inside
+## ファイル構成
 
-| Path | Role |
+| パス | 役割 |
 |---|---|
-| `src/mastra/agents/chat-agent.ts` | Mastra Agent wired to Ollama via `ollama-ai-provider-v2` |
-| `src/mastra/tools/now-tool.ts` | Example tool — registered in `chat-agent.ts` |
-| `src/mastra/index.ts` | Mastra instance |
-| `src/app/api/chat/route.ts` | Next.js API route using `handleChatStream` from `@mastra/ai-sdk` |
-| `src/app/chat/page.tsx` | UI using `useChat` from `@ai-sdk/react` and AI Elements |
+| `src/mastra/agents/chat-agent.ts` | Ollama を `ollama-ai-provider-v2` 経由で呼び出す Mastra Agent |
+| `src/mastra/tools/now-tool.ts` | サンプルのツール — `chat-agent.ts` に登録済み |
+| `src/mastra/index.ts` | Mastra インスタンス |
+| `src/app/api/chat/route.ts` | `@mastra/ai-sdk` の `handleChatStream` を使う Next.js API ルート |
+| `src/app/chat/page.tsx` | `@ai-sdk/react` の `useChat` と AI Elements を使った UI |
 
-## Pinned versions (important)
+## バージョン固定について（重要）
 
-This stack must stay on AI SDK **v5** because `@mastra/ai-sdk` defaults to v5. Pin these:
+`@mastra/ai-sdk` が AI SDK **v5** に依存しているため、以下のバージョンを固定する必要があります。
 
 - `ai@^5`
 - `@ai-sdk/react@^2`
 - `ollama-ai-provider-v2@^1.5.5`
 
-`@mastra/core@latest` and `@mastra/ai-sdk@latest` are fine.
+`@mastra/core@latest` と `@mastra/ai-sdk@latest` はそのままで問題ありません。
 
-## License
+## ライセンス
 
 MIT
